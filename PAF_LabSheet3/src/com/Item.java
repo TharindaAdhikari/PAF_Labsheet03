@@ -96,7 +96,7 @@ public class Item {
 	// buttons
 	output += "<td><input name='btnUpdate' "
 	+ " type='button' value='Update'></td>"
-	+ "<td><form method='post' action='items.jsp'>"
+	+ "<td><form method='post' action='itemps.jsp'>"
 	+ "<input name='btnRemove' "
 	+ " type='submit' value='Remove'>"
 	+ "<input name='itemID' type='hidden' "
@@ -109,6 +109,35 @@ public class Item {
 	catch (Exception e)
 	{
 	output = "Error while reading the items.";
+	System.err.println(e.getMessage());
+	}
+	return output;
+	}
+	
+	
+	public String deleteItem(String itemID)
+	{
+	String output = "";
+	try
+	{
+	Connection con = connect();
+	if (con == null)
+	{
+	return "Error while connecting to the database for deleting.";
+	}
+	// create a prepared statement
+	String query = "delete from items where itemID=?";
+	PreparedStatement preparedStmt = con.prepareStatement(query);
+	// binding values
+	preparedStmt.setInt(1, Integer.parseInt(itemID));
+	// execute the statement
+	preparedStmt.execute();
+	con.close();
+	output = "Deleted successfully";
+	}
+	catch (Exception e)
+	{
+	output = "Error while deleting the item.";
 	System.err.println(e.getMessage());
 	}
 	return output;
